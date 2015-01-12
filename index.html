@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Photo Upload Demo</title>
+
+  <link rel="stylesheet" type="text/css" href="./assets/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="./assets/styles/vendor/ng-img-crop.css">
+  <link rel="stylesheet" type="text/css" href="./assets/styles/main.css">
+
+  <script type="text/javascript" src="./assets/js/vendor/angular.min.js"></script>
+  <script type="text/javascript" src="./assets/js/vendor/ngImgCrop.min.js"></script>
+</head>
+<body ng-app="photoUpload">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <h1>Profile Settings</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-md-6" ng-controller='PhotoUploadMain'>
+        <input type="file" id="file-uploader">
+        <div class="cropArea">
+          <img-crop image="profileImage" result-image="croppedProfileImage" area-type="square" on-change="imgCropChange($dataURI)"></img-crop>
+        </div>
+        <img ng-src="{{croppedProfileImage}}" class='img-responsive'>
+      </div>
+      <div class="col-xs-12 col-md-6" ng-controller='PhotoUploadCustom'>
+        <input type="file" id="bsx-file-uploader">
+
+        <div class="crop-bsx">
+          <img ng-src="{{uploadedFile}}" class='crop-image'>
+        </div>
+
+        <div class="crop-bsx-show" style="width: {{psuedoCrop.width}}px; height: {{psuedoCrop.height}}px;">
+          <img ng-src="{{uploadedFile}}" style="margin-top:-{{psuedoCrop.topHide}}px; margin-left:-{{psuedoCrop.leftHide}}px;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="./assets/js/main.js"></script>
+</body>
+</html>
