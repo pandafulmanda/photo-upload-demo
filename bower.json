@@ -1,0 +1,21 @@
+{
+  "name": "photo-upload-demo",
+  "version": "0.0.0",
+  "authors": [
+    "pandafulmanda <pandafulmanda@gmail.com>"
+  ],
+  "description": "demo photo upload",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ngImgCrop": "~0.3.2",
+    "angular-file-upload": "~1.1.5"
+  }
+}
