@@ -13,23 +13,16 @@
     $scope.imgCropChange = imgCropChange;
 
 
-    document.getElementById('file-uploader').addEventListener('change', fileSelected);
+    document.getElementById('file-uploader').addEventListener('change', function(fileSelectEvent){
 
+      fileSelected(fileSelectEvent, function(fileSelectEvent){
 
-    function fileSelected(fileSelectEvent){
-
-      var file = fileSelectEvent.currentTarget.files[0],
-        reader = new FileReader();
-
-      reader.onload = function(fileSelectEvent){
         $scope.$apply(function($scope){
-          $scope.profileImage = fileSelectEvent.target.result;          
+          $scope.profileImage = fileSelectEvent.target.result;
         });
-      };
+      });
 
-      reader.readAsDataURL(file);
-    }
-
+    });
 
     function imgCropChange(cropperData){
       console.log(cropperData);
@@ -39,6 +32,9 @@
 
   function PhotoUploadCustomCtrl($scope){
 
+    var cropper = document.querySelector('.crop-bsx'),
+      uploadedImage = document.querySelector('.crop-bsx img'),
+      image = {};
 
     $scope.uploadedFile = '';
     $scope.croppedUploadedFile = '';
@@ -49,11 +45,16 @@
       leftHide: 0
     };
 
+    document.getElementById('bsx-file-uploader').addEventListener('change', function(fileSelectEvent){
 
-    document.getElementById('bsx-file-uploader').addEventListener('change', fileSelected);
-    var cropper = document.querySelector('.crop-bsx'),
-      uploadedImage = document.querySelector('.crop-bsx img'),
-      image = {};
+      fileSelected(fileSelectEvent, function(fileSelectEvent){
+
+        $scope.$apply(function($scope){
+          $scope.uploadedFile = fileSelectEvent.target.result;          
+        });
+      });
+
+    });
 
     uploadedImage.addEventListener('mousedown', function(mouseDownEvent){
 
@@ -80,44 +81,36 @@
     });
 
 
+
+    // calculate cropper coordinates
     function calcCropperCoords(imageCoords){
       var offsets = quickOffsetCalc(uploadedImage),
         relativeCoords = {
           up : {
             x: imageCoords.up.x - offsets.left,
-            y: imageCoords.up.y - offsets.top
+            y: imageCoords.up.y - offsets.top + window.scrollY
           },
           down: {
             x: imageCoords.down.x - offsets.left,
-            y: imageCoords.down.y - offsets.top
+            y: imageCoords.down.y - offsets.top + window.scrollY
           }
         }
 
+      // force psuedo crop values to update for style
       $scope.$apply(function($scope){
         $scope.psuedoCrop.width = Math.abs(relativeCoords.up.x - relativeCoords.down.x);
         $scope.psuedoCrop.height = Math.abs(relativeCoords.up.y - relativeCoords.down.y);
         $scope.psuedoCrop.topHide = Math.min(relativeCoords.up.y, relativeCoords.down.y);
         $scope.psuedoCrop.leftHide = Math.min(relativeCoords.up.x, relativeCoords.down.x);
       });
+
       console.log(relativeCoords);
 
     }
 
 
-    function fileSelected(fileSelectEvent){
 
-      var file = fileSelectEvent.currentTarget.files[0],
-        reader = new FileReader();
-
-      reader.onload = function(fileSelectEvent){
-        $scope.$apply(function($scope){
-          $scope.uploadedFile = fileSelectEvent.target.result;
-        });
-      };
-
-      reader.readAsDataURL(file);
-    }
-
+    // Quickly calculate offset of an element from the origin point of the page without jQuery
     function quickOffsetCalc(element){
 
       var offset = {
@@ -133,7 +126,18 @@
 
       return offset;
     }
+  }
 
+
+
+  function fileSelected(fileSelectEvent, afterFileLoadedCallBack){
+
+    var file = fileSelectEvent.currentTarget.files[0],
+      reader = new FileReader();
+
+    reader.onload = afterFileLoadedCallBack;
+
+    reader.readAsDataURL(file);
   }
 
 })(window, angular);
