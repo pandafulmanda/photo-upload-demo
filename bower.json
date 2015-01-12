@@ -5,7 +5,6 @@
     "pandafulmanda <pandafulmanda@gmail.com>"
   ],
   "description": "demo photo upload",
-  "license": "MIT",
   "private": true,
   "ignore": [
     "**/.*",
